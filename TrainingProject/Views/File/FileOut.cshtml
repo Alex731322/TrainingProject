@@ -64,15 +64,31 @@
      {
         if (User.IsInRole("admin"))
         {*@
-           @using (Html.BeginForm("CreateFolder", "File", FormMethod.Post))
+           @*@using (Html.BeginForm("CreateFolder", "File", FormMethod.Post))
             {
                 <label for="file">Folder Name:</label>
                 <input type="text" name="folderName" />
                 <input type="submit" />
-            }
+            }*@
         @*}
 
      }*@
+
+           @using (Html.BeginForm("CreateFolder", "File", FormMethod.Post))
+            {
+                <label for="file">Folder Name:</label>
+                <input type="hidden" value="@Model.PathToContent", name="pathToFolder">
+                <input type="text" name="folderName" />
+                <input type="submit" />
+            }
+
+           @using (Html.BeginForm("CreateFile", "File", FormMethod.Post))
+            {
+                <label for="file">File Name:</label>
+                <input type="hidden" value="@Model.PathToContent", name="pathToFile">
+                <input type="text" name="fileName" />
+                <input type="submit" />
+            }
 
     <script type="text/javascript">
 
