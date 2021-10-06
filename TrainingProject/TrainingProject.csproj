@@ -258,7 +258,6 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\RolesAdmin\Index.cshtml" />
-    <Content Include="Views\RolesAdmin\Create.cshtml" />
     <Content Include="Views\RolesAdmin\ListUsers.cshtml" />
     <Content Include="Views\RolesAdmin\ManageUserRoles.cshtml" />
     <Content Include="Views\File\FileOut.cshtml" />

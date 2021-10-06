@@ -26,11 +26,11 @@
             <th>Folder Name</th>
             <th>Directory</th>
         </tr>
-        @foreach (var folderName in Model.NameFolder)
+        @foreach (var folderName in Model.NameFolders)
         {
 
             <tr>
-                <td onclick="EnterToDirectory(this, '@Model.PathToContent' )">@folderName</td>
+                <td>@folderName</td>
                 <td>@Model.PathToContent</td>
             </tr>
         }
@@ -41,38 +41,38 @@
             <th>File Name</th>
             <th>Directory</th>
         </tr>
-        @foreach (var fileName in Model.NameFile)
-        {
+        @foreach (var fileName in Model.NameFiles)
+         {
 
             <tr>
-                <td onclick="EnterToDirectory(this, '@Model.PathToContent' )">@fileName</td>
+                <td>@fileName</td>
 
-                @if (Request.IsAuthenticated)
+                @*@if (Request.IsAuthenticated)
                 {
                     if (User.IsInRole("admin"))
-                    {
+                    {*@
                         <td>@Html.ActionLink("Delete", "DeleteFile", new { fileName = fileName, path = Model.PathToContent })</td>
-                    }
+                    @*}
 
-                }
+                }*@
             </tr>
-        }
+         }
     </table>
 
 
-    @if (Request.IsAuthenticated)
+    @*@if (Request.IsAuthenticated)
      {
         if (User.IsInRole("admin"))
-        {
-            using (Html.BeginForm("CreateFolder", "File", FormMethod.Post))
+        {*@
+           @using (Html.BeginForm("CreateFolder", "File", FormMethod.Post))
             {
                 <label for="file">Folder Name:</label>
                 <input type="text" name="folderName" />
                 <input type="submit" />
             }
-        }
+        @*}
 
-     }
+     }*@
 
     <script type="text/javascript">
 
@@ -95,7 +95,6 @@
     <style>
         table {
             margin: 20px auto;
-            max-width: 80%;
             border: 1px solid black;
             border-collapse: collapse;
         }

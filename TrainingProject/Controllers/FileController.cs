@@ -36,13 +36,13 @@ namespace TrainingProject.Controllers
 
             foreach (string filepath in filespaths)
             {
-                files.NameFile.Add(Path.GetFileName(filepath));
+                files.NameFiles.Add(Path.GetFileName(filepath));
             }
             
 
             foreach(string folderPath in folderspaths)
             {
-                files.NameFolder.Add(Path.GetFileName(folderPath));
+                files.NameFolders.Add(Path.GetFileName(folderPath));
             }
             
 
