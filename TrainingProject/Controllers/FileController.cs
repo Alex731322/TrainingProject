@@ -69,7 +69,7 @@ namespace TrainingProject.Controllers
 
             using (FileStream fstream = new FileStream(pathToContent, FileMode.Create))
             {
-                byte[] array = System.Text.Encoding.Default.GetBytes("Alena is the best sister in the world");
+                byte[] array = System.Text.Encoding.Default.GetBytes("Something");
                 fstream.Write(array, 0, array.Length);
 
             }
