@@ -1,0 +1,115 @@
+﻿@using TrainingProject.Models
+@model FileDirectoryModel
+
+@{
+
+    Layout = null;
+}
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/Scripts/jquery-3.4.1.min.js")
+    @Scripts.Render("~/Scripts/jquery.validate.min.js")
+</head>
+
+<body>
+
+    <table>
+        <tr>
+            <th>Folder Name</th>
+            <th>Directory</th>
+        </tr>
+        @foreach (var folderName in Model.NameFolder)
+        {
+
+            <tr>
+                <td onclick="EnterToDirectory(this, '@Model.PathToContent' )">@folderName</td>
+                <td>@Model.PathToContent</td>
+            </tr>
+        }
+    </table>
+
+    <table>
+        <tr>
+            <th>File Name</th>
+            <th>Directory</th>
+        </tr>
+        @foreach (var fileName in Model.NameFile)
+        {
+
+            <tr>
+                <td onclick="EnterToDirectory(this, '@Model.PathToContent' )">@fileName</td>
+
+                @if (Request.IsAuthenticated)
+                {
+                    if (User.IsInRole("admin"))
+                    {
+                        <td>@Html.ActionLink("Delete", "DeleteFile", new { fileName = fileName, path = Model.PathToContent })</td>
+                    }
+
+                }
+            </tr>
+        }
+    </table>
+
+
+    @if (Request.IsAuthenticated)
+     {
+        if (User.IsInRole("admin"))
+        {
+            using (Html.BeginForm("CreateFolder", "File", FormMethod.Post))
+            {
+                <label for="file">Folder Name:</label>
+                <input type="text" name="folderName" />
+                <input type="submit" />
+            }
+        }
+
+     }
+
+    <script type="text/javascript">
+
+        let selectedTd;
+
+        function EnterToDirectory(event, path) {
+
+            let pathToFolder = path + '/' + event.innerHTML;
+
+            $.ajax({
+                type: 'GET',
+                url: '/C/',
+                data: { 'name': path, 'newName': event.innerHTML }
+            });
+        }
+
+    </script>
+
+
+    <style>
+        table {
+            margin: 20px auto;
+            max-width: 80%;
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        td {
+            border: 1px solid black;
+            padding: 10px;
+        }
+
+        th {
+            text-align: center;
+        }
+    </style>
+
+
+</body>
+</html> 
