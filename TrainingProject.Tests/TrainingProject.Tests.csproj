@@ -90,7 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Controllers\HomeControllerTest.cs" />
+    <Compile Include="Services\HomeControllerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />
@@ -99,6 +99,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ServiceCL\ServiceCL.csproj">
+      <Project>{4F07FB5A-FCF6-426F-8D5A-50624C538D2C}</Project>
+      <Name>ServiceCL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TrainingProject\TrainingProject.csproj">
       <Project>{85C8F2C3-4D21-42FB-A193-40BAC5FE8CB1}</Project>
       <Name>TrainingProject</Name>

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
+﻿using EntitiesCL;
+using ServiceCL.Services;
+using System;
 using System.Web.Mvc;
 using TrainingProject.Models;
 
@@ -13,38 +9,36 @@ namespace TrainingProject.Controllers
     public class FileController : Controller
     {
 
+        private IFileService _fileServisce;
+        private IFolderService _folderService;
+        private IRouteService _routeService;
+
+        public FileController(IFileService fileService, IFolderService folderService, IRouteService routeService)
+        {
+            _fileServisce = fileService;
+            _folderService = folderService;
+            _routeService = routeService;
+        }
+
 
         [Route("~/C/{*catchall}")]
         public ActionResult FileOut()
         {
 
-            string path = Request.Path.Length > 3 ? Request.Path.Substring(3).ToString() :
-                                                            String.Empty;
+            string path = _routeService.handleRoute(Request.Path, Request.Path.Length);
 
-            FileDirectoryModel files = new FileDirectoryModel();
+          
+            FilesEntity filesEntity = new FilesEntity();
 
-            string[] folderspaths = Directory.GetDirectories($@"C:/{path}");
-            string[] filespaths = Directory.GetFiles($@"C:/{path}");
+            filesEntity = _fileServisce.ListFiles(path, filesEntity);
 
-            files.PathToContent = $@"C:/{path}";
 
-            if (Directory.GetFiles($@"C:/{path}").Length == 0)
+            FileModel files = new FileModel()
             {
-                return HttpNotFound(); 
-            }
-
-
-            foreach (string filepath in filespaths)
-            {
-                files.NameFiles.Add(Path.GetFileName(filepath));
-            }
-            
-
-            foreach(string folderPath in folderspaths)
-            {
-                files.NameFolders.Add(Path.GetFileName(folderPath));
-            }
-            
+                NameFiles = filesEntity.NameFiles,
+                NameFolders = filesEntity.NameFolders,
+                PathToContent = filesEntity.PathToContent
+            };
 
             return View(files);
         }
@@ -53,15 +47,10 @@ namespace TrainingProject.Controllers
         {
             string pathToContent = $@"{path}/{fileName}" ;
 
-
-            FileInfo fileInf = new FileInfo(pathToContent);
-
-            if (fileInf.Exists)
-            {
-                fileInf.Delete();
-            }
-            path = path.Length > 3 ? path.Substring(3).ToString() :
-                                                            String.Empty;
+            _fileServisce.RemoveFile(pathToContent);
+        
+            path = _routeService.handleRoute(path, path.Length);
+          
             return Redirect($"~/C/{path}");
         }
 
@@ -69,14 +58,9 @@ namespace TrainingProject.Controllers
         {
             string pathToContent = $@"{pathToFile}/{fileName}";
 
-            using (FileStream fstream = new FileStream(pathToContent, FileMode.Create))
-            {
-                byte[] array = System.Text.Encoding.Default.GetBytes("Something");
-                fstream.Write(array, 0, array.Length);
+            _fileServisce.AddFile(pathToContent);
 
-            }
-
-            pathToFile = pathToFile.Length > 3 ? pathToFile.Substring(3).ToString() : String.Empty;
+            pathToFile = _routeService.handleRoute(pathToFile, pathToFile.Length);
 
             return Redirect($"~/C/{pathToFile}");
         }
@@ -86,20 +70,11 @@ namespace TrainingProject.Controllers
         public ActionResult CreateFolder(string folderName, string pathToFolder)
         {
 
-            string folder = $@"{pathToFolder}/{folderName}";
-            
-            if (!Directory.Exists(folder))
-            {
-                Directory.CreateDirectory(folder);
-                ViewBag.Message = "Folder " + folderName.ToString() + " created successfully!";
-            }
-            else
-            {
-                ViewBag.Message = "Folder " + folderName.ToString() + "  already exists!";
-            }
+            string path = $@"{pathToFolder}/{folderName}";
 
-            pathToFolder = pathToFolder.Length > 3 ? pathToFolder.Substring(3).ToString() :
-                                                            String.Empty;
+            _folderService.createFolder(path); 
+
+            pathToFolder = _routeService.handleRoute(pathToFolder, pathToFolder.Length);
 
             return Redirect($"~/C/{pathToFolder}");
         }

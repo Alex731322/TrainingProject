@@ -1,10 +1,11 @@
 ﻿@using TrainingProject.Models
-@model FileDirectoryModel
+@using React.Web.Mvc
+@model FileModel
 
-@{
+@*@{
 
     Layout = null;
-}
+}*@
 
 
 
@@ -13,10 +14,12 @@
     <meta name="viewport" content="width=device-width" />
     <title>Index</title>
 
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
-    @Scripts.Render("~/Scripts/jquery-3.4.1.min.js")
-    @Scripts.Render("~/Scripts/jquery.validate.min.js")
+    @*@Styles.Render("~/Content/css")*@
+    @*@Scripts.Render("~/bundles/modernizr")*@
+    @*@Scripts.Render("~/Scripts/jquery-3.4.1.min.js")
+    @Scripts.Render("~/Scripts/jquery.validate.min.js")*@
+
+
 </head>
 
 <body>
@@ -30,7 +33,7 @@
         {
 
             <tr>
-                <td>@folderName</td>
+                <td onclick="EnterToFolder(this, '@Model.PathToContent')">@folderName</td>
                 <td>@Model.PathToContent</td>
             </tr>
         }
@@ -42,70 +45,53 @@
             <th>Directory</th>
         </tr>
         @foreach (var fileName in Model.NameFiles)
-         {
+        {
 
             <tr>
                 <td>@fileName</td>
 
-                @*@if (Request.IsAuthenticated)
+                @if (Request.IsAuthenticated)
                 {
                     if (User.IsInRole("admin"))
-                    {*@
+                    {
                         <td>@Html.ActionLink("Delete", "DeleteFile", new { fileName = fileName, path = Model.PathToContent })</td>
-                    @*}
+                    }
 
-                }*@
+                }
             </tr>
-         }
+        }
     </table>
 
 
-    @*@if (Request.IsAuthenticated)
-     {
-        if (User.IsInRole("admin"))
-        {*@
-           @*@using (Html.BeginForm("CreateFolder", "File", FormMethod.Post))
-            {
-                <label for="file">Folder Name:</label>
-                <input type="text" name="folderName" />
-                <input type="submit" />
-            }*@
-        @*}
+    @using (Html.BeginForm("CreateFolder", "File", FormMethod.Post))
+    {
+        <label for="file">Folder Name:</label>
+        <input type="hidden" value="@Model.PathToContent" , name="pathToFolder">
+        <input type="text" name="folderName" />
+        <input type="submit" />
+    }
 
-     }*@
+    @using (Html.BeginForm("CreateFile", "File", FormMethod.Post))
+    {
+        <label for="file">File Name:</label>
+        <input type="hidden" value="@Model.PathToContent" , name="pathToFile">
+        <input type="text" name="fileName" />
+        <input type="submit" />
+    }
 
-           @using (Html.BeginForm("CreateFolder", "File", FormMethod.Post))
-            {
-                <label for="file">Folder Name:</label>
-                <input type="hidden" value="@Model.PathToContent", name="pathToFolder">
-                <input type="text" name="folderName" />
-                <input type="submit" />
-            }
+    <div id="app"></div>
+    
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
 
-           @using (Html.BeginForm("CreateFile", "File", FormMethod.Post))
-            {
-                <label for="file">File Name:</label>
-                <input type="hidden" value="@Model.PathToContent", name="pathToFile">
-                <input type="text" name="fileName" />
-                <input type="submit" />
-            }
 
-    <script type="text/javascript">
 
-        let selectedTd;
 
-        function EnterToDirectory(event, path) {
 
-            let pathToFolder = path + '/' + event.innerHTML;
 
-            $.ajax({
-                type: 'GET',
-                url: '/C/',
-                data: { 'name': path, 'newName': event.innerHTML }
-            });
-        }
 
-    </script>
+    <script src="@Url.Content("~/Scripts/app.jsx")"></script>
+
 
 
     <style>

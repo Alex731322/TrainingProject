@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace TrainingProject.Models
+namespace EntitiesCL
 {
-    public class FileModel
+    public class FilesEntity
     {
         public List<string> NameFiles { get; set; } = new List<string>();
         public List<string> NameFolders { get; set; } = new List<string>();
